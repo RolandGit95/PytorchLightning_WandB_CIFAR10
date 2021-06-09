@@ -41,15 +41,13 @@ class ImageDataModule(pl.LightningDataModule):
         self.target_transform = target_transform
     
     def prepare_data(self):
-        pass
+        self.train_dataset = datasets.CIFAR10(os.getcwd(), download=True, transform=np.array)
 
-    def setup(self, stage=None):
-        dataset = datasets.CIFAR10(os.getcwd(), download=True, transform=np.array)
-            
+    def setup(self, stage=None):            
         n_train = int(len(dataset)*self.cfg.train_split+0.5)
         n_val = int(len(dataset)*(1-self.cfg.train_split)+0.5)
         
-        imageDataset = ImageDataset(dataset, transform=self.transform, target_transform=self.target_transform)
+        imageDataset = ImageDataset(self.train_dataset, transform=self.transform, target_transform=self.target_transform)
         self.train_dataset, self.val_dataset = random_split(imageDataset, [n_train, n_val])
     
     def train_dataloader(self):
