@@ -98,6 +98,7 @@ trainer = pl.Trainer(gpus=1,
 if cfg.auto_lr_find:
     trainer.tune(model, datamodule=dataset)
     
+    
 trainer.fit(model, dataset)
 # -
 
